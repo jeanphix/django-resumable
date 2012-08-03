@@ -4,7 +4,7 @@ import os
 from tempfile import gettempdir
 
 from django.test import TestCase
-from django.core.files.base import File
+from django.core.files.base import File, ContentFile
 from django.core.files.storage import FileSystemStorage
 
 from resumable.files import ResumableFile
@@ -56,5 +56,28 @@ class ResumableFileTest(TestCase):
     def test_chunk_exists_missing(self):
         self.assertFalse(self.seagull.chunk_exists)
 
+    def test_file_complete(self):
+        self.assertEqual(len(self.craw.file), 49028)
+
+    def test_file_partial(self):
+        self.assertRaises(lambda: self.seagull.file)
+
     def test_filename(self):
         self.assertEqual(self.seagull.filename, '147292_seagull.ogg')
+
+    def test_is_complete_complete(self):
+        self.assertTrue(self.craw.is_complete)
+
+    def test_is_complete_partial(self):
+        self.assertFalse(self.seagull.is_complete)
+
+    def test_process_chunk(self):
+        self.assertFalse(self.seagull.chunk_exists)
+        self.seagull.process_chunk(ContentFile('content'))
+        self.assertTrue(self.seagull.chunk_exists)
+
+    def test_size_complete(self):
+        self.assertEqual(self.craw.size, 49028)
+
+    def test_size_partial(self):
+        self.assertEqual(self.seagull.size, 71680)

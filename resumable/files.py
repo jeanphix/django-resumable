@@ -62,13 +62,13 @@ class ResumableFile(object):
         """
         return int(self.kwargs.get('resumableTotalSize')) == self.size
 
-    def process_chunk(self, content):
+    def process_chunk(self, file):
         if not self.chunk_exists:
             self.storage.save('%s%s%s' % (
                 self.filename,
                 self.chunk_suffix,
                 self.kwargs.get('resumableChunkNumber')
-            ), content)
+            ), file)
 
     @property
     def size(self):
