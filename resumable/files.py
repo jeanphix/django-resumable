@@ -24,10 +24,12 @@ class ResumableFile(object):
     def chunks(self):
         """Iterates over all stored chunks.
         """
+        chunks = []
         for file in self.storage.listdir('')[1]:
             if fnmatch.fnmatch(file, '%s%s*' % (self.filename,
                     self.chunk_suffix)):
-                yield file
+                chunks.append(file)
+        return chunks
 
     def delete_chunks(self):
         [self.storage.delete(chunk) for chunk in self.chunks]
