@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 import os
 
-from tempfile import gettempdir
+from  urllib import urlencode
 
+from django.conf import settings
 from django.test import TestCase
-from django.core.files.base import File, ContentFile
+from django.core.files.base import ContentFile
 from django.core.files.storage import FileSystemStorage
+from django.core.urlresolvers import reverse
 
 from resumable.files import ResumableFile
 
@@ -27,10 +29,10 @@ craw = {
 }
 
 
-class ResumableFileTest(TestCase):
+class BaseTestCase(TestCase):
     def setUp(self):
-        test_storage = FileSystemStorage(location='%s/resumable-test' % \
-            gettempdir())
+        test_storage = FileSystemStorage(
+            location=getattr(settings, 'CHUNKS_ROOT'))
         fixtures_root = os.path.join(TESTS_ROOT, 'fixtures', 'files')
         fixtures_storage = FileSystemStorage(location=fixtures_root)
 
@@ -47,6 +49,8 @@ class ResumableFileTest(TestCase):
         for filename in self.storage.listdir('.')[1]:
             self.storage.delete(filename)
 
+
+class ResumableFileTest(BaseTestCase):
     def test_chunks(self):
         self.assertEqual(len(self.seagull.chunks), 7)
 
@@ -81,3 +85,15 @@ class ResumableFileTest(TestCase):
 
     def test_size_partial(self):
         self.assertEqual(self.seagull.size, 71680)
+
+
+class ResumableUploadViewTest(BaseTestCase):
+    def test_get_existing(self):
+        url = '%s?%s' % (reverse('upload'), urlencode(craw))
+        r = self.client.get(url)
+        self.assertEqual(r.status_code, 200)
+
+    def test_get_missing(self):
+        url = '%s?%s' % (reverse('upload'), urlencode(seagull))
+        r = self.client.get(url)
+        self.assertEqual(r.status_code, 200)

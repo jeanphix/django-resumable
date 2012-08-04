@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-import settings
+from django.conf import settings
 
 from django.views.generic import View
 from django.http import Http404, HttpResponse
 from django.core.exceptions import ImproperlyConfigured
 from django.core.files.storage import FileSystemStorage
 
-from .files import ResumableFile
+from resumable.files import ResumableFile
 
 
 class ResumableUploadView(View):
@@ -15,7 +15,7 @@ class ResumableUploadView(View):
         """
         r = ResumableFile(self.storage, self.request.GET)
         if not r.chunk_exists:
-            raise Http404('chunk not found')
+            return HttpResponse('chunk not found', status=404)
         return HttpResponse('chunk already exists')
 
     def post(self, *args, **kwargs):
