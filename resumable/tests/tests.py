@@ -33,8 +33,8 @@ class BaseTestCase(TestCase):
     def setUp(self):
         test_storage = FileSystemStorage(
             location=getattr(settings, 'CHUNKS_ROOT'))
-        fixtures_root = os.path.join(TESTS_ROOT, 'fixtures', 'files')
-        fixtures_storage = FileSystemStorage(location=fixtures_root)
+        self.fixtures_root = os.path.join(TESTS_ROOT, 'fixtures', 'files')
+        fixtures_storage = FileSystemStorage(location=self.fixtures_root)
 
         for filename in fixtures_storage.listdir('.')[1]:
             test_storage.save(
@@ -96,4 +96,12 @@ class ResumableUploadViewTest(BaseTestCase):
     def test_get_missing(self):
         url = '%s?%s' % (reverse('upload'), urlencode(seagull))
         r = self.client.get(url)
-        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.status_code, 404)
+
+    def test_post_missing(self):
+        self.assertFalse(self.seagull.chunk_exists)
+        params = dict(seagull, **{
+            'file': open(os.path.join(self.fixtures_root, 'chunk'))
+        })
+        r = self.client.post(reverse('upload'), params)
+        self.assertTrue(self.seagull.chunk_exists)

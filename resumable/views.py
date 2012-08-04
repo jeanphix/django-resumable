@@ -23,6 +23,8 @@ class ResumableUploadView(View):
         """
         chunk = self.request.FILES.get('file')
         r = ResumableFile(self.storage, self.request.POST)
+        if r.chunk_exists:
+            return HttpResponse('chunk already exists')
         r.process_chunk(chunk)
         if r.is_complete:
             self.process_file(r.filename, r.file)
