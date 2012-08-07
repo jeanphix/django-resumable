@@ -50,6 +50,10 @@ class BaseTestCase(TestCase):
             self.storage.delete(filename)
 
 
+class ResumableFileFieldTest(BaseTestCase):
+    pass
+
+
 class ResumableFileTest(BaseTestCase):
     def test_chunks(self):
         self.assertEqual(len(self.seagull.chunks), 7)
