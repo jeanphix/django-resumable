@@ -14,7 +14,7 @@ class ResumableUploadView(View):
         """Checks if chunk has allready been sended.
         """
         r = ResumableFile(self.storage, self.request.GET)
-        if not r.chunk_exists:
+        if not (r.chunk_exists or r.is_complete):
             return HttpResponse('chunk not found', status=404)
         return HttpResponse('chunk already exists')
 
@@ -37,8 +37,13 @@ class ResumableUploadView(View):
         self.storage.save(filename, file)
 
     @property
+    def chunks_dir(self):
+        chunks_dir = getattr(settings, 'FILE_UPLOAD_TEMP_DIR', None)
+        if not chunks_dir:
+            raise ImproperlyConfigured(
+                'You must set settings.FILE_UPLOAD_TEMP_DIR')
+        return chunks_dir
+
+    @property
     def storage(self):
-        chunks_root = getattr(settings, 'CHUNKS_ROOT', None)
-        if chunks_root is None:
-            raise ImproperlyConfigured('You must set a CHUNKS_ROOT setting')
-        return FileSystemStorage(location=chunks_root)
+        return FileSystemStorage(location=self.chunk_dir)

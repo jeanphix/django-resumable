@@ -60,6 +60,8 @@ class ResumableFile(object):
     def is_complete(self):
         """Checks if all chunks are allready stored.
         """
+        if self.storage.exists(self.filename):
+            return True
         return int(self.kwargs.get('resumableTotalSize')) == self.size
 
     def process_chunk(self, file):

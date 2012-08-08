@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
-from django.forms.widgets import FileInput
+from mimetypes import guess_type
+
+from django.forms.widgets import FileInput, CheckboxInput
+from django.core.files.storage import FileSystemStorage
+from django.core.files.uploadedfile import UploadedFile
 
 
 class ResumableFileInput(FileInput):
@@ -11,7 +15,18 @@ class ResumableFileInput(FileInput):
 
     def value_from_datadict(self, data, files, name):
         filename = data.get(self.path_input_hidden_name(name))
+        storage = self.storage
         if filename is not None and len(filename) > 0 \
-                and self.storage.exists(filename):
-            return self.storage.open(filename)
+                and storage.exists(filename):
+            file = storage.open(filename)
+            return UploadedFile(
+                file=file,
+                name = filename,
+                content_type=guess_type(file.name)[0],
+                size = storage.size(filename)
+            )
         return files.get(name, None)
+
+    @property
+    def storage(self):
+        return FileSystemStorage(location=self.chunks_dir)

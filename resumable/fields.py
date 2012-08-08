@@ -18,11 +18,11 @@ class ResumableFileField(FileField):
         self.widget.attrs['upload-url'] = url
 
     @property
-    def storage(self):
-        if not hasattr(self.widget, 'storage'):
-            raise Exception("You must set the storage.")
+    def chunks_dir(self):
+        if not hasattr(self.widget, 'chunks_dir'):
+            raise Exception("You must set a `chunk_dir`.")
         return self.widget.storage
 
-    @storage.setter
-    def storage(self, storage):
-        self.widget.storage = storage
+    @chunks_dir.setter
+    def chunks_dir(self, chunks_dir):
+        self.widget.chunks_dir = chunks_dir
