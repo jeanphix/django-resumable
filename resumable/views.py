@@ -46,4 +46,4 @@ class ResumableUploadView(View):
 
     @property
     def storage(self):
-        return FileSystemStorage(location=self.chunk_dir)
+        return FileSystemStorage(location=self.chunks_dir)

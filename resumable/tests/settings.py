@@ -22,4 +22,4 @@ SECRET_KEY = 'secret'
 
 ROOT_URLCONF = 'resumable.tests.app'
 
-CHUNKS_ROOT = '%s/resumable-test' % gettempdir()
+FILE_UPLOAD_TEMP_DIR = '%s/resumable-test' % gettempdir()

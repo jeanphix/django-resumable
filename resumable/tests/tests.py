@@ -32,8 +32,9 @@ craw = {
 class BaseTestCase(TestCase):
     def setUp(self):
         test_storage = FileSystemStorage(
-            location=getattr(settings, 'CHUNKS_ROOT'))
-        self.fixtures_root = os.path.join(TESTS_ROOT, 'fixtures', 'files')
+            location=getattr(settings, 'FILE_UPLOAD_TEMP_DIR'))
+        self.fixtures_root = os.path.join(TESTS_ROOT, 'fixtures', 'files',
+            'chunks')
         fixtures_storage = FileSystemStorage(location=self.fixtures_root)
 
         for filename in fixtures_storage.listdir('.')[1]:
