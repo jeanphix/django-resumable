@@ -52,7 +52,8 @@ class BaseTestCase(TestCase):
 
 
 class ResumableFileFieldTest(BaseTestCase):
-    pass
+    class ResumableForm():
+        pass
 
 
 class ResumableFileTest(BaseTestCase):
@@ -108,5 +109,5 @@ class ResumableUploadViewTest(BaseTestCase):
         params = dict(seagull, **{
             'file': open(os.path.join(self.fixtures_root, 'chunk'))
         })
-        r = self.client.post(reverse('upload'), params)
+        self.client.post(reverse('upload'), params)
         self.assertTrue(self.seagull.chunk_exists)
