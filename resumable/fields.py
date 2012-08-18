@@ -31,7 +31,7 @@ class ResumableFileField(FileField):
         if self.allowed_mimes is not None and \
                 f.content_type not in self.allowed_mimes:
             raise ValidationError(self.error_messages['invalid_mime'])
-        return value
+        return f
 
     @property
     def upload_url(self):
