@@ -9,7 +9,7 @@ $(document).ready(function () {
         });
         if (r.support) {
             r.assignBrowse(el);
-            var el = $(el);
+            el = $(el);
             var progress = $('<progress value="0" max="1" />').css('display', 'none');
             var path_name = $(el).attr('name') + '-path';
             var path = $('[name=' + path_name + ']');
