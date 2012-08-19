@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
-from mimetypes import guess_type
+import magic
 
 from django.forms.widgets import FileInput, HiddenInput
 from django.core.files.storage import FileSystemStorage
 from django.core.files.uploadedfile import UploadedFile
 from django.utils.safestring import mark_safe
 from django.template import loader
+
+
+def guess_type(path):
+    mime = magic.Magic(mime=True)
+    return mime.from_file(path)
 
 
 class ResumableFileInput(FileInput):
@@ -34,7 +39,7 @@ class ResumableFileInput(FileInput):
             return UploadedFile(
                 file=file,
                 name = self.filename,
-                content_type=guess_type(file.name)[0],
+                content_type=guess_type(file.name),
                 size = size
             )
         return files.get(name, None)
