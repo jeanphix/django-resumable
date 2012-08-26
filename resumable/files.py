@@ -22,7 +22,7 @@ class ResumableFile(object):
         return self.storage.exists("%s%s%s" % (
             self.filename,
             self.chunk_suffix,
-            self.kwargs.get('resumableChunkNumber')
+            self.kwargs.get('resumableChunkNumber').zfill(4)
         ))
 
     @property
@@ -30,7 +30,8 @@ class ResumableFile(object):
         """Iterates over all stored chunks.
         """
         chunks = []
-        for file in self.storage.listdir('')[1]:
+        files = sorted(self.storage.listdir('')[1])
+        for file in files:
             if fnmatch.fnmatch(file, '%s%s*' % (self.filename,
                     self.chunk_suffix)):
                 chunks.append(file)
@@ -74,7 +75,7 @@ class ResumableFile(object):
             self.storage.save('%s%s%s' % (
                 self.filename,
                 self.chunk_suffix,
-                self.kwargs.get('resumableChunkNumber')
+                self.kwargs.get('resumableChunkNumber').zfill(4)
             ), file)
 
     @property
