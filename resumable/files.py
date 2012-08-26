@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 import fnmatch
 
+try:
+        from cStringIO import StringIO
+except ImportError:
+        from StringIO import StringIO
+
 from django.core.files.base import ContentFile
 
 
@@ -40,10 +45,10 @@ class ResumableFile(object):
         """
         if not self.is_complete:
             raise Exception('Chunk(s) still missing')
-        content = ''
+        content = StringIO()
         for chunk in self.chunks:
-            content += self.storage.open(chunk).read()
-        return ContentFile(content)
+            content.write(self.storage.open(chunk).read())
+        return ContentFile(content.getvalue())
 
     @property
     def filename(self):

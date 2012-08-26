@@ -8,11 +8,6 @@ from django.utils.safestring import mark_safe
 from django.template import loader
 
 
-def guess_type(path):
-    mime = magic.Magic(mime=True)
-    return mime.from_file(path)
-
-
 class ResumableFileInput(FileInput):
     template_name = 'resumable/file_input.html'
 
@@ -27,6 +22,11 @@ class ResumableFileInput(FileInput):
         """
         return "%s-path" % name
 
+    def guess_type(self, path):
+        mime = magic.Magic(mime=True)
+        print mime.from_file(path)
+        return mime.from_file(path)
+
     def value_from_datadict(self, data, files, name):
         filepath = data.get(self.filename_input_name(name))
         storage = self.storage
@@ -39,7 +39,7 @@ class ResumableFileInput(FileInput):
             return UploadedFile(
                 file=file,
                 name = self.filename,
-                content_type=guess_type(file.name),
+                content_type=self.guess_type(file.name),
                 size = size
             )
         return files.get(name, None)
