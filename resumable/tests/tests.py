@@ -6,13 +6,20 @@ from  urllib import urlencode
 from django.conf import settings
 from django.test import TestCase
 from django.core.files.base import ContentFile
+from django.core.files.uploadedfile import UploadedFile
 from django.core.files.storage import FileSystemStorage
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ValidationError
+from django.forms import Form
 
 from resumable.files import ResumableFile
+from resumable.fields import ResumableFileField
 
 
 TESTS_ROOT = os.path.dirname(__file__)
+
+
+CHUNKS_ROOT = os.path.join(TESTS_ROOT, 'fixtures', 'files', 'chunks')
 
 
 seagull = {
@@ -33,9 +40,7 @@ class BaseTestCase(TestCase):
     def setUp(self):
         test_storage = FileSystemStorage(
             location=getattr(settings, 'FILE_UPLOAD_TEMP_DIR'))
-        self.fixtures_root = os.path.join(TESTS_ROOT, 'fixtures', 'files',
-            'chunks')
-        fixtures_storage = FileSystemStorage(location=self.fixtures_root)
+        fixtures_storage = FileSystemStorage(location=CHUNKS_ROOT)
 
         for filename in fixtures_storage.listdir('.')[1]:
             test_storage.save(
@@ -51,9 +56,28 @@ class BaseTestCase(TestCase):
             self.storage.delete(filename)
 
 
+class ResumableForm(Form):
+    file = ResumableFileField(allowed_mimes=("audio/ogg",))
+
+
 class ResumableFileFieldTest(BaseTestCase):
-    class ResumableForm():
-        pass
+    def test_clean_invalid_mime(self):
+        form = ResumableForm()
+        with self.assertRaises(ValidationError):
+            form.fields.get('file').clean(None, UploadedFile(
+                file=None,
+                name="text.txt",
+                content_type="text/plain"
+            ))
+
+    def test_clean_valid_mime(self):
+        form = ResumableForm()
+        f = UploadedFile(
+            file=None,
+            name="sound.ogg",
+            content_type="audio/ogg"
+        )
+        self.assertEqual(f, form.fields.get('file').clean(None, f))
 
 
 class ResumableFileTest(BaseTestCase):
@@ -107,7 +131,7 @@ class ResumableUploadViewTest(BaseTestCase):
     def test_post_missing(self):
         self.assertFalse(self.seagull.chunk_exists)
         params = dict(seagull, **{
-            'file': open(os.path.join(self.fixtures_root, 'chunk'))
+            'file': open(os.path.join(CHUNKS_ROOT, 'chunk'))
         })
         self.client.post(reverse('upload'), params)
         self.assertTrue(self.seagull.chunk_exists)
