@@ -14,7 +14,11 @@ class ResumableFileField(FileField):
 
     def __init__(self, *args, **kwargs):
         self.allowed_mimes = kwargs.pop('allowed_mimes', None)
+        upload_url = kwargs.pop('upload_url', None)
+        chunks_dir = kwargs.pop('chunks_dir', None)
         super(ResumableFileField, self).__init__(*args, **kwargs)
+        self.upload_url = upload_url
+        self.chunks_dir = chunks_dir
 
     @property
     def chunks_dir(self):

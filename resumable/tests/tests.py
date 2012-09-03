@@ -57,7 +57,14 @@ class BaseTestCase(TestCase):
 
 
 class ResumableForm(Form):
-    file = ResumableFileField(allowed_mimes=("audio/ogg",))
+    file = ResumableFileField(
+        allowed_mimes=("audio/ogg",),
+        upload_url=reverse('upload'),
+        chunks_dir=getattr(settings, 'FILE_UPLOAD_TEMP_DIR')
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(ResumableForm, self).__init__(*args, **kwargs)
 
 
 class ResumableFileFieldTest(BaseTestCase):
