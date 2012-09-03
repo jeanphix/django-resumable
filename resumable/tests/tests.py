@@ -10,16 +10,19 @@ from django.core.files.uploadedfile import UploadedFile
 from django.core.files.storage import FileSystemStorage
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
-from django.forms import Form
 
 from resumable.files import ResumableFile
-from resumable.fields import ResumableFileField
+
+from .app import ResumableForm
 
 
 TESTS_ROOT = os.path.dirname(__file__)
 
 
-CHUNKS_ROOT = os.path.join(TESTS_ROOT, 'fixtures', 'files', 'chunks')
+FIXTURES_ROOT = os.path.join(TESTS_ROOT, 'fixtures', 'files')
+
+
+CHUNKS_ROOT = os.path.join(FIXTURES_ROOT, 'chunks')
 
 
 seagull = {
@@ -56,17 +59,6 @@ class BaseTestCase(TestCase):
             self.storage.delete(filename)
 
 
-class ResumableForm(Form):
-    file = ResumableFileField(
-        allowed_mimes=("audio/ogg",),
-        upload_url=reverse('upload'),
-        chunks_dir=getattr(settings, 'FILE_UPLOAD_TEMP_DIR')
-    )
-
-    def __init__(self, *args, **kwargs):
-        super(ResumableForm, self).__init__(*args, **kwargs)
-
-
 class ResumableFileFieldTest(BaseTestCase):
     def test_clean_invalid_mime(self):
         form = ResumableForm()
@@ -85,6 +77,11 @@ class ResumableFileFieldTest(BaseTestCase):
             content_type="audio/ogg"
         )
         self.assertEqual(f, form.fields.get('file').clean(None, f))
+
+    def test_form_upload_file(self):
+        r = self.client.post(reverse('form'), {'file': open(os.path.join(
+            FIXTURES_ROOT, '147292_seagull.ogg'))})
+        self.assertEqual(r.status_code, 302)
 
 
 class ResumableFileTest(BaseTestCase):
