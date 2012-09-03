@@ -24,7 +24,6 @@ class ResumableFileInput(FileInput):
 
     def guess_type(self, path):
         mime = magic.Magic(mime=True)
-        print mime.from_file(path)
         return mime.from_file(path)
 
     def value_from_datadict(self, data, files, name):
