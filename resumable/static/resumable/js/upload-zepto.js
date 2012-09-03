@@ -10,10 +10,11 @@ $(document).ready(function () {
         if (r.support) {
             r.assignBrowse(el);
             el = $(el);
-            var progress = $('<progress value="0" max="1" />').css('display', 'none');
-            var path_name = $(el).attr('name') + '-path';
-            var path = $('[name=' + path_name + ']');
-            var path_label = $('label[for=id_' + path_name + ']');
+            var progress, path_name, path, path_label;
+            progress = $('<progress value="0" max="1" />').css('display', 'none');
+            path_name = $(el).attr('name') + '-path';
+            path = $('[name=' + path_name + ']');
+            path_label = $('label[for=id_' + path_name + ']');
             el.after(progress);
             r.on('fileAdded', function () {
                 r.upload();
