@@ -12,11 +12,17 @@ DATABASES = {
 }
 
 INSTALLED_APPS = [
+    'django.contrib.staticfiles',
     'resumable',
     'resumable.tests.app',
 ]
 
 STATIC_URL = '/static/'
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
 
 SECRET_KEY = 'secret'
 

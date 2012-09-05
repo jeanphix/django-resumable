@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html>
     <body>
@@ -8,5 +9,8 @@
             </fieldset>
             <p><input type="submit" value="send" /></p>
         </form>
+        <script type="text/javascript" src="https://raw.github.com/23/resumable.js/master/resumable.js"></script>
+        <script type="text/javascript" src="{% static 'resumable/js/django-resumable.js' %}"></script>
+        <script type="text/javascript" src="{% static 'resumable/js/init.js' %}"></script>
     </body>
 </html>

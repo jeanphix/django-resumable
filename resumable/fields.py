@@ -39,10 +39,10 @@ class ResumableFileField(FileField):
 
     @property
     def upload_url(self):
-        if not 'upload_url' in self.widget.attrs:
+        if not 'data-upload-url' in self.widget.attrs:
             raise Exception("You must set the upload url.")
-        return self.widget.attrs['upload_url']
+        return self.widget.attrs['data-upload-url']
 
     @upload_url.setter
     def upload_url(self, url):
-        self.widget.attrs['upload-url'] = url
+        self.widget.attrs['data-upload-url'] = url
