@@ -1,9 +1,8 @@
 django-resumable
 ----------------
 
-``django-resumable`` provides django backend stuff that handles `resumable.js`_ xhr uploads.
+``django-resumable`` provides django backend stuff that handles `resumable.js<https://github.com/23/Resumable.js>`_ xhr uploads.
 
-.. resumable.js: https://github.com/23/Resumable.js
 
 
 Installation
@@ -16,7 +15,7 @@ Installation
 Views
 -----
 
-In order to upload files asynchronous, you must defined un endpoint that will deals
+In order to upload files asynchronous, you must define an endpoint that will deal
 with uploaded file chunks.::
 
     from django.contrib.auth.decorators import login_required
