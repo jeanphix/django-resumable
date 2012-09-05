@@ -13,7 +13,7 @@ setup(
     url='https://github.com/jeanphix/django-resumable',
     license='MIT licence',
     description='Django resumable uploads',
-    long_description=open('README.rst').read()
+    long_description=open('README.rst').read(),
     install_requires=[
         'Django>=1.4',
     ],
