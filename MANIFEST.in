@@ -1,0 +1,4 @@
+include README.rst
+recursive-include resumable/templates *
+recursive-include resumable/static *
+recursive-exclude resumable *.pyc
