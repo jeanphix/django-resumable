@@ -35,7 +35,7 @@ You should also consider having per user chunk upload directory::
     class MyResumableUploadView(ResumableUploadView):
         @property
         def chunks_dir(self):
-            return request.user.profile.chunks_dir
+            return self.request.user.profile.chunks_dir
 
 
 Fields
