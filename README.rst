@@ -26,7 +26,7 @@ with uploaded file chunks::
 
 
     urlpatterns += patterns('',
-        url(^upload/$', login_required(ResumableUploadView.as_view()),
+        url('^upload/$', login_required(ResumableUploadView.as_view()),
             name='upload'),
     )
 
