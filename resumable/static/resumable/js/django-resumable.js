@@ -132,7 +132,9 @@ DjangoResumable.prototype.onFileError = function (r, file, message, el) {
     var errorList = this.getErrorList(el, true),
         error = document.createElement('li');
     error.innerHTML = message;
-    errorList.appendChild(error);
+    if (errorList) {
+        errorList.appendChild(error);
+    }
 };
 
 
