@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 import magic
 
-from django.forms.widgets import FileInput, HiddenInput
+from django.forms.widgets import FileInput
 from django.core.files.storage import FileSystemStorage
 from django.core.files.uploadedfile import UploadedFile
-from django.utils.safestring import mark_safe
 from django.template import loader
 
 
@@ -37,9 +36,9 @@ class ResumableFileInput(FileInput):
             self.filename = filepath.lstrip('%s_' % unicode(size))
             return UploadedFile(
                 file=file,
-                name = self.filename,
+                name=self.filename,
                 content_type=self.guess_type(file.name),
-                size = size
+                size=size
             )
         return files.get(name, None)
 
