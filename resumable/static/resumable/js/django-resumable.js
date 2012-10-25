@@ -10,7 +10,8 @@ var DjangoResumable = function (options) {
         onFileError: this.onFileError,
         onFileAdded: this.onFileAdded,
         onFileSuccess: this.onFileSuccess,
-        onProgress: this.onProgress
+        onProgress: this.onProgress,
+        resumableOptions: {}
     };
     this.options = this.extend(defaults, options);
     this.csrfToken = document.querySelector('input[name=' + this.options.csrfInputName + ']').value;
@@ -32,10 +33,10 @@ DjangoResumable.prototype.each = function (elements, fn) {
 
 DjangoResumable.prototype.extend = function (target, source) {
     "use strict";
-    var key;
-    for (key in source) {
-        if (source[key] !== undefined) {
-            target[key] = source[key];
+    var property;
+    for (property in source) {
+        if (source.hasOwnProperty(property)) {
+            target[property] = source[property];
         }
     }
     return target;
@@ -45,10 +46,10 @@ DjangoResumable.prototype.extend = function (target, source) {
 DjangoResumable.prototype.getErrorList = function (el, create) {
     "use strict";
     var errorList = el.parentNode.previousSibling;
-    while (errorList.tagName === undefined) {
+    while (errorList && errorList.tagName === undefined) {
         errorList = errorList.previousSibling;
     }
-    if (!errorList.classList.contains(this.options.errorListClass)) {
+    if (errorList && !errorList.classList.contains(this.options.errorListClass)) {
         if (create === true) {
             errorList = document.createElement('ul');
             errorList.classList.add(this.options.errorListClass);
@@ -104,12 +105,15 @@ DjangoResumable.prototype.initResumable = function (el, progress, filePath, file
     "use strict";
     var elements = Array.prototype.slice.call(arguments),
         self = this,
-        r = new Resumable({
-            target : el.getAttribute(this.options.urlAttribute),
+        opts = {
+            target: el.getAttribute(this.options.urlAttribute),
             query: {
                 'csrfmiddlewaretoken': this.csrfToken
             }
-        });
+        };
+
+    opts = this.extend(this.options.resumableOptions, opts);
+    var r = new Resumable(opts);
     r.assignBrowse(el);
     this.each(['fileAdded', 'progress', 'fileSuccess', 'fileError'], function (eventType) {
         var callback = this.options['on' + eventType.substring(0, 1).toUpperCase() + eventType.substring(1)];
