@@ -16,7 +16,8 @@ class ResumableFile(object):
                            self.kwargs.get('resumableChunkNumber').zfill(4))
         if not self.storage.exists(name):
             return False
-        return self.storage.size(name) == int(self.kwargs.get('resumableChunkSize'))
+        chunk_size = int(self.kwargs.get('resumableCurrentChunkSize'))
+        return self.storage.size(name) == chunk_size
 
     def chunk_names(self):
         """Iterates over all stored chunks and yields their names."""
