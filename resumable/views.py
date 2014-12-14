@@ -27,7 +27,7 @@ class ResumableUploadView(View):
             return HttpResponse('chunk already exists')
         r.process_chunk(chunk)
         if r.is_complete:
-            self.process_file(r.filename, r.file)
+            self.process_file(r.filename, r)
             r.delete_chunks()
         return HttpResponse()
 
