@@ -138,7 +138,7 @@ DjangoResumable.prototype.onFileError = function (r, file, message, el) {
 };
 
 
-DjangoResumable.prototype.onFileAdded = function (r, file, el, progress, filePath, fileName) {
+DjangoResumable.prototype.onFileAdded = function (r, file, event, el, progress, filePath, fileName) {
     "use strict";
     var errorList = this.getErrorList(el);
     if (errorList) {

@@ -5,7 +5,7 @@ from setuptools import find_packages
 
 setup(
     name='django-resumable',
-    version='0.1b',
+    version='0.1',
     author=u'jean-philippe serafin',
     author_email='serafinjp@gmail.com',
     packages=find_packages(),
@@ -19,7 +19,7 @@ setup(
         'python-magic',
     ],
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
         'Framework :: Django',
         'Intended Audience :: Developers',

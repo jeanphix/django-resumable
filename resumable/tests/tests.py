@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 
-from  urllib import urlencode
+from urllib import urlencode
 
 from django.conf import settings
 from django.test import TestCase
@@ -36,6 +36,7 @@ craw = {
     'resumableTotalSize': '49028',
     'resumableFilename': 'craw.ogg',
     'resumableChunkNumber': '4',
+    'resumableCurrentChunkSize': 18308,
 }
 
 
@@ -85,20 +86,23 @@ class ResumableFileFieldTest(BaseTestCase):
 
 
 class ResumableFileTest(BaseTestCase):
-    def test_chunks(self):
-        self.assertEqual(len(self.seagull.chunks), 7)
+    def test_chunks_partial(self):
+        iterations = 0
+        for chunk in self.seagull.chunks():
+            iterations += 1
+        self.assertEqual(iterations, 7)
+
+    def test_chunks_complete(self):
+        data = ''
+        for chunk in self.craw.chunks():
+            data += chunk
+        self.assertEqual(len(data), 49028)
 
     def test_chunk_exists_existing(self):
         self.assertTrue(self.craw.chunk_exists)
 
     def test_chunk_exists_missing(self):
         self.assertFalse(self.seagull.chunk_exists)
-
-    def test_file_complete(self):
-        self.assertEqual(len(self.craw.file), 49028)
-
-    def test_file_partial(self):
-        self.assertRaises(lambda: self.seagull.file)
 
     def test_filename(self):
         self.assertEqual(self.seagull.filename, '147292_seagull.ogg')
@@ -111,7 +115,9 @@ class ResumableFileTest(BaseTestCase):
 
     def test_process_chunk(self):
         self.assertFalse(self.seagull.chunk_exists)
-        self.seagull.process_chunk(ContentFile('content'))
+        chunk = ContentFile('content')
+        self.seagull.kwargs['resumableCurrentChunkSize'] = chunk.size
+        self.seagull.process_chunk(chunk)
         self.assertTrue(self.seagull.chunk_exists)
 
     def test_size_complete(self):
@@ -134,8 +140,13 @@ class ResumableUploadViewTest(BaseTestCase):
 
     def test_post_missing(self):
         self.assertFalse(self.seagull.chunk_exists)
+        path = os.path.join(CHUNKS_ROOT, 'chunk')
+        size =  os.path.getsize(path)
+        chunk = open(path)
         params = dict(seagull, **{
-            'file': open(os.path.join(CHUNKS_ROOT, 'chunk'))
+            'file': chunk,
+            'resumableCurrentChunkSize': size,
         })
+        self.seagull.kwargs['resumableCurrentChunkSize'] = size
         self.client.post(reverse('upload'), params)
         self.assertTrue(self.seagull.chunk_exists)

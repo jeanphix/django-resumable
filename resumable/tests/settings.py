@@ -29,3 +29,7 @@ SECRET_KEY = 'secret'
 ROOT_URLCONF = 'resumable.tests.app'
 
 FILE_UPLOAD_TEMP_DIR = '%s/resumable-test' % gettempdir()
+
+MIDDLEWARE_CLASSES = [
+    'django.middleware.csrf.CsrfViewMiddleware',
+]
