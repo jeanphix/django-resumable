@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 
-from  urllib import urlencode
+from urllib import urlencode
 
 from django.conf import settings
 from django.test import TestCase
