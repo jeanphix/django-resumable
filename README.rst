@@ -19,7 +19,9 @@ Views
 -----
 
 In order to upload files asynchronous, you must define an endpoint that will deal
-with uploaded file chunks::
+with uploaded file chunks:
+
+.. code-block:: python
 
     from django.contrib.auth.decorators import login_required
 
@@ -31,7 +33,9 @@ with uploaded file chunks::
             name='upload'),
     )
 
-You should also consider having per user chunk upload directory::
+You should also consider having per user chunk upload directory:
+
+.. code-block:: python
 
     class MyResumableUploadView(ResumableUploadView):
         @property
@@ -43,7 +47,9 @@ Fields
 ------
 
 If you want to handle resumable upload within your forms, you can use the ``ResumableFileField``
-that works like django core ``FileField``::
+that works like django core ``FileField``:
+
+.. code-block:: python
 
     from django.conf import settings
     from django.core.urlresolvers import reverse
@@ -62,7 +68,9 @@ that works like django core ``FileField``::
 Javascript
 ----------
 
-``django-resumable`` comes with extendable frontend scripts that work out of the box::
+``django-resumable`` comes with extendable frontend scripts that work out of the box:
+
+.. code-block:: html
 
     {% load staticfiles %}
     <!DOCTYPE html>
