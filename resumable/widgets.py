@@ -33,7 +33,7 @@ class ResumableFileInput(FileInput):
             file = storage.open(filepath)
             size = storage.size(filepath)
             self.filepath = filepath
-            self.filename = filepath.lstrip('%s_' % unicode(size))
+            self.filename = filepath.replace('%s_' % unicode(size), '', 1)
             return UploadedFile(
                 file=file,
                 name=self.filename,
