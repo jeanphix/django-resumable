@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import magic
+import re
 
 from django.forms.widgets import FileInput
 from django.core.files.storage import FileSystemStorage
@@ -33,7 +34,7 @@ class ResumableFileInput(FileInput):
             file = storage.open(filepath)
             size = storage.size(filepath)
             self.filepath = filepath
-            self.filename = filepath.replace('%s_' % unicode(size), '', 1)
+            self.filename = re.sub('^%s_' % unicode(size), '', filepath)
             return UploadedFile(
                 file=file,
                 name=self.filename,
