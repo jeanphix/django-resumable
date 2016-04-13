@@ -5,7 +5,7 @@ from setuptools import find_packages
 
 setup(
     name='django-resumable',
-    version='0.1',
+    version='0.1.1',
     author=u'jean-philippe serafin',
     author_email='serafinjp@gmail.com',
     packages=find_packages(),
