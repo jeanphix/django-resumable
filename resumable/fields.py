@@ -3,7 +3,7 @@ from django.forms.fields import FileField
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
-from widgets import ResumableFileInput
+from .widgets import ResumableFileInput
 
 
 class ResumableFileField(FileField):

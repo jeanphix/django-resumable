@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 
-from urllib import urlencode
+from urllib.parse import urlencode
 
 from django.conf import settings
 from django.test import TestCase
@@ -81,7 +81,7 @@ class ResumableFileFieldTest(BaseTestCase):
 
     def test_form_upload_file(self):
         r = self.client.post(reverse('form'), {'file': open(os.path.join(
-            FIXTURES_ROOT, '147292_seagull.ogg'))})
+            FIXTURES_ROOT, '147292_seagull.ogg'), 'rb')})
         self.assertEqual(r.status_code, 302)
 
 
@@ -93,7 +93,7 @@ class ResumableFileTest(BaseTestCase):
         self.assertEqual(iterations, 7)
 
     def test_chunks_complete(self):
-        data = ''
+        data = b''
         for chunk in self.craw.chunks():
             data += chunk
         self.assertEqual(len(data), 49028)
