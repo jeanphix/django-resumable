@@ -141,7 +141,7 @@ class ResumableUploadViewTest(BaseTestCase):
     def test_post_missing(self):
         self.assertFalse(self.seagull.chunk_exists)
         path = os.path.join(CHUNKS_ROOT, 'chunk')
-        size =  os.path.getsize(path)
+        size = os.path.getsize(path)
         chunk = open(path)
         params = dict(seagull, **{
             'file': chunk,
