@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from tempfile import gettempdir
+from tempfile import mkdtemp
 
 
 DEBUG = True
@@ -28,8 +28,15 @@ SECRET_KEY = 'secret'
 
 ROOT_URLCONF = 'resumable.tests.app'
 
-FILE_UPLOAD_TEMP_DIR = '%s/resumable-test' % gettempdir()
+FILE_UPLOAD_TEMP_DIR = mkdtemp()
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.csrf.CsrfViewMiddleware',
+]
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': True,
+    },
 ]

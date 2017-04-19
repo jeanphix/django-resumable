@@ -3,7 +3,7 @@ from django.forms.fields import FileField
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
-from widgets import ResumableFileInput
+from .widgets import ResumableFileInput
 
 
 class ResumableFileField(FileField):
@@ -39,8 +39,9 @@ class ResumableFileField(FileField):
 
     @property
     def upload_url(self):
-        if not 'data-upload-url' in self.widget.attrs:
+        if 'data-upload-url' not in self.widget.attrs:
             raise Exception("You must set the upload url.")
+
         return self.widget.attrs['data-upload-url']
 
     @upload_url.setter

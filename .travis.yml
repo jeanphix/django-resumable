@@ -1,0 +1,7 @@
+language: python
+python:
+  - "3.4"
+  - "3.5"
+  - "3.6"
+install: "pip install django python-magic"
+script: PYTHONPATH=. DJANGO_SETTINGS_MODULE=resumable.tests.settings django-admin test
