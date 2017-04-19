@@ -1,8 +1,9 @@
 django-resumable
 ----------------
 
-.. image:: https://drone.io/github.com/jeanphix/django-resumable/status.png
-   :target: https://drone.io/github.com/jeanphix/django-resumable/latest
+.. image:: https://travis-ci.org/jeanphix/django-resumable.svg
+   :target: https://travis-ci.org/jeanphix/django-resumable
+   :alt: Build Status
 
 ``django-resumable`` provides django backend stuff that handles `resumable.js <https://github.com/23/Resumable.js>`_ xhr uploads.
 
