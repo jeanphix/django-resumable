@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
-from django.conf.urls import patterns, url
+from django.conf.urls import url
+from django.conf.urls.static import static
 from django.views.generic.edit import FormView
 from django.forms import Form
 from django.core.urlresolvers import reverse
@@ -30,7 +31,7 @@ class TestFormView(FormView):
 urlpatterns = staticfiles_urlpatterns()
 
 
-urlpatterns += patterns('',
+urlpatterns = [
     url('^$', TestFormView.as_view(), name='form'),
     url('^upload/$', ResumableUploadView.as_view(), name='upload')
-)
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

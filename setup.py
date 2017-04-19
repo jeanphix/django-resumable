@@ -5,7 +5,7 @@ from setuptools import find_packages
 
 setup(
     name='django-resumable',
-    version='0.1.1',
+    version='0.2.0-dev',
     author=u'jean-philippe serafin',
     author_email='serafinjp@gmail.com',
     packages=find_packages(),
@@ -15,7 +15,7 @@ setup(
     description='Django resumable uploads',
     long_description=open('README.rst').read(),
     install_requires=[
-        'Django>=1.4',
+        'Django>=1.10',
         'python-magic',
     ],
     classifiers=[

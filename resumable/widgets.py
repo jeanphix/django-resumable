@@ -34,7 +34,7 @@ class ResumableFileInput(FileInput):
             file = storage.open(filepath)
             size = storage.size(filepath)
             self.filepath = filepath
-            self.filename = re.sub('^%s_' % unicode(size), '', filepath)
+            self.filename = re.sub('^%s_' % str(size), '', filepath)
             return UploadedFile(
                 file=file,
                 name=self.filename,
@@ -44,12 +44,17 @@ class ResumableFileInput(FileInput):
         return files.get(name, None)
 
     def render(self, name, value, attrs=None, **kwargs):
+        attrs = self.build_attrs(attrs)
+
+        if 'required' in attrs:
+            del attrs['required']
+
         context = {
             'filename': self.filename,
             'filename_input_value': self.filepath,
             'filename_input_name': self.filename_input_name(name),
             'file_input_name': name,
-            'attrs': self.build_attrs(attrs)
+            'attrs': attrs,
         }
         return loader.render_to_string(self.template_name, context)
 

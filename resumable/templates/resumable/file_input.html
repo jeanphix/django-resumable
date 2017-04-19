@@ -3,4 +3,4 @@
 </label>
 <label for="{{ attrs.id }}">change:</label>
 <input id="id_{{ filename_input_name }}" type="hidden" name="{{ filename_input_name }}" value="{{ filename_input_value }}" />
-<input type="file" name="{{ file_input_name }}" {% for name, value in attrs.iteritems %} {{ name }}{% if value != True %}="{{ value }}"{% endif %}{% endfor %} />
+<input type="file" name="{{ file_input_name }}" {% for name, value in attrs.items %} {{ name }}{% if value != True %}="{{ value }}"{% endif %}{% endfor %} />
