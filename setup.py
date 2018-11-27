@@ -15,7 +15,7 @@ setup(
     description='Django resumable uploads',
     long_description=open('README.rst').read(),
     install_requires=[
-        'Django>=1.10',
+        'Django>=1.9',
         'python-magic',
     ],
     classifiers=[
