@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 import fnmatch
 
+from django.conf import settings
+
+RESUMABLE_FILENAME_PREPEND_FILESIZE = getattr(settings, 'RESUMABLE_FILENAME_PREPEND_FILESIZE', True)
+
 
 class ResumableFile(object):
     def __init__(self, storage, kwargs):
@@ -42,10 +46,12 @@ class ResumableFile(object):
         filename = self.kwargs.get('resumableFilename')
         if '/' in filename:
             raise Exception('Invalid filename')
-        return "%s_%s" % (
-            self.kwargs.get('resumableTotalSize'),
-            filename
-        )
+        if RESUMABLE_FILENAME_PREPEND_FILESIZE:
+            return "%s_%s" % (
+                self.kwargs.get('resumableTotalSize'),
+                filename
+            )
+        return "%s" % filename
 
     @property
     def is_complete(self):

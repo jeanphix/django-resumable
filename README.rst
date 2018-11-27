@@ -89,3 +89,9 @@ Javascript
             <script type="text/javascript" src="{% static 'resumable/js/init.js' %}"></script>
         </body>
     </html>
+
+
+Settings
+--------
+
+``RESUMABLE_FILENAME_PREPEND_FILESIZE`` default ``True``: Otherwise it'll use the original filename.
