@@ -15,7 +15,7 @@ class ResumableUploadView(View):
         """
         r = ResumableFile(self.storage, self.request.GET)
         if not (r.chunk_exists or r.is_complete):
-            return HttpResponse('chunk not found', status=404)
+            return HttpResponse('chunk not found', status=204)
         return HttpResponse('chunk already exists')
 
     def post(self, *args, **kwargs):
